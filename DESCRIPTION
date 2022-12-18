@@ -1,0 +1,43 @@
+Package: snd
+Title: R package for modeling Call of Duty SnD win probability
+Version: 0.0.1
+Authors@R: 
+    person(given = "Tony",
+           family = "ElHabr",
+           role = c("aut", "cre"),
+           email = "anthonyelhabr@gmail.com")
+Description: A framework for modeling win probability in Call of Duty (CoD)
+    Search and Destroy (SnD). Enables visualization of continuous win 
+    probability within a round.
+License: MIT + file LICENSE
+Depends: 
+    R (>= 4.1.0)
+Imports: 
+    broom,
+    dplyr,
+    extrafont,
+    ggtext,
+    ggplot2,
+    glue,
+    purrr,
+    rlang,
+    scales,
+    stringr,
+    tibble,
+    tidyr,
+    tidyselect
+Suggests: 
+    cropcircles,
+    knitr,
+    magick,
+    rmarkdown,
+    roxygen2,
+    rvest,
+    testthat (>= 3.0.0)
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
+VignetteBuilder: knitr
+URL: https://github.com/tonyelhabr/snd
+Config/testthat/edition: 3
