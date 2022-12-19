@@ -29,7 +29,6 @@ Imports:
 Suggests: 
     cropcircles,
     knitr,
-    magick,
     rmarkdown,
     roxygen2,
     rvest,

@@ -4,22 +4,6 @@ default_side <- 'o'
 max_pre_plant_second <- 90L
 max_post_plant_second <- 45L
 
-## TODO: Add validation for is_pre_plant
-## Add extra second so that LOESS span can handle exactly on the last second
-generate_seconds_grid <- function(is_pre_plant) {
-  if (isTRUE(is_pre_plant)) {
-    min_second <- c(seq(0, 75, by = 3), seq(75, 85, by = 1), seq(86, 90, by = 0.5))
-    max_second <- c(seq(15, 90, by = 3), seq(80, 90, by = 1), rep(90, 9))
-  } else {
-    min_second <- c(seq(0, 30, 2), seq(30, 38, 1), seq(39, 45, by = 0.5))
-    max_second <- c(seq(10, 40, 2), seq(37, 45, 1), rep(45, 13))
-  }
-  tibble::tibble(
-    min_second = min_second,
-    max_second = max_second
-  )
-}
-
 get_max_second <- function(is_pre_plant) {
   ifelse(isTRUE(is_pre_plant), max_pre_plant_second, max_post_plant_second)
 }
@@ -46,13 +30,13 @@ get_all_features <- function(is_pre_plant, named = FALSE) {
   names(features)
 }
 
-
 validate_colnames <- function(data, is_predict = FALSE) {
 
   base_cols <- c(
     'is_pre_plant',
     'side'
   )
+
   base_cols <- if (isFALSE(is_predict)) {
     c(
       base_cols,
@@ -100,7 +84,7 @@ validate_colnames <- function(data, is_predict = FALSE) {
     )
   }
 
-  invisible(data)
+  invisible(TRUE)
 }
 
 split_model_data <- function(data) {
@@ -170,11 +154,9 @@ add_hardcoded_wp_cols <- function(data) {
 
         TRUE ~ NA_real_
       ),
-      is_wp_hardcoded = !is.na(.data[['hardcoded_wp']])
+      'is_wp_hardcoded' = !is.na(.data[['hardcoded_wp']])
     ) |>
     dplyr::select(
       -tidyselect::vars_select_helpers$matches('is_[10N]v[10N]_post_plant')
     )
 }
-
-

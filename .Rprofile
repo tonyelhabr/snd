@@ -12,5 +12,3 @@ if (interactive()) {
   suppressMessages(library(pkgdown))
   pkgload::load_all()
 }
-
-

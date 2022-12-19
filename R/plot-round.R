@@ -5,18 +5,18 @@ side_labs_mapping <- c(
 )
 
 plot_round <- function(
-    model,
-    data,
-    round_id,
-    side = 'o',
-    expand = FALSE,
-    save = TRUE,
-    path = file.path('figs', sprintf('round_id=%s&side=%s&expand=%s.png', round_id, side, tolower(expand))),
-    ggsave.args = list(
-      height = 10,
-      width = 10,
-      units = 'in'
-    )
+  model,
+  data,
+  round_id,
+  side = 'o',
+  expand = FALSE,
+  save = TRUE,
+  path = NULL,
+  ggsave.args = list(
+    height = 10,
+    width = 10,
+    units = 'in'
+  )
 ) {
 
   stopifnot(length(round_id) == 1)
@@ -352,6 +352,10 @@ plot_round <- function(
   print(p)
   if (isFALSE(save)) {
     return(p)
+  }
+
+  if (is.null(path)) {
+    path <- file.path(getOption('snd.dir.figs', getwd()), sprintf('round_id=%s&side=%s&expand=%s.png', round_id, side, tolower(expand)))
   }
 
   rlang::exec(

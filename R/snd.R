@@ -1,5 +1,5 @@
 
-#' @importFrom rlang .data arg_match set_names
+#' @importFrom rlang !! !!! .data arg_match set_names exec
 #' @importFrom dplyr select filter mutate summarize group_by ungroup bind_rows case_when transmute na_if
 #' @importFrom ggplot2 theme_minimal theme element_text element_blank element_line margin element_rect theme_set update_geom_defaults geom_step geom_line scale_x_continuous scale_y_continuous labs guides facet_wrap coord_cartesian aes geom_hline geom_vline .pt
 #' @importFrom extrafont loadfonts
