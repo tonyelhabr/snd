@@ -4,6 +4,137 @@ side_labs_mapping <- c(
   'd' = 'defense'
 )
 
+## for plot_round
+get_extra_cols <- function() {
+
+  list(
+    'extra-grid' = c(
+      'model_seconds_remaining'
+    ),
+    'extra-filt' = c(
+      'side',
+      'is_wp_hardcoded',
+      'hardcoded_wp'
+    ),
+    'id' = c(
+      'seconds_elapsed',
+      'is_pre_plant'
+    )
+  )
+}
+
+
+expand_activities <- function(df) {
+  seconds_elapsed_range <- range(filt[['seconds_elapsed']])
+  pre_plant_seconds_elapsed_range <- filt |>
+    dplyr::filter(.data[['is_pre_plant']]) |>
+    dplyr::pull(.data[['model_seconds_elapsed']]) |>
+    range()
+
+  pre_plant_seconds_seq <- seq(
+    pre_plant_seconds_elapsed_range[1],
+    pre_plant_seconds_elapsed_range[2],
+    by = 0.1
+  )
+
+  grid <- tibble::tibble(
+    'model_seconds_elapsed' = pre_plant_seconds_seq,
+    'is_pre_plant' = rep(TRUE, length(pre_plant_seconds_seq))
+  ) |>
+    dplyr::mutate(
+      'seconds_elapsed' = .data[['model_seconds_elapsed']],
+      'model_seconds_remaining' = 90L - .data[['seconds_elapsed']]
+    )
+
+  if (isTRUE(round_has_plant)) {
+
+    post_plant_seconds_elapsed_range <- filt |>
+      dplyr::filter(!.data[['is_pre_plant']]) |>
+      dplyr::pull(.data[['model_seconds_elapsed']]) |>
+      range()
+
+    post_plant_seconds_seq <- seq(
+      post_plant_seconds_elapsed_range[1],
+      post_plant_seconds_elapsed_range[2],
+      by = 0.1
+    )
+
+
+    grid <- dplyr::bind_rows(
+      grid,
+      tibble::tibble(
+        'model_seconds_elapsed' = post_plant_seconds_seq,
+        'is_pre_plant' = rep(FALSE, length(post_plant_seconds_seq))
+      ) |>
+        dplyr::mutate(
+          'seconds_elapsed' = pre_plant_seconds_elapsed_range[2] + .data[['model_seconds_elapsed']],
+          'model_seconds_remaining' = 45L - .data[['model_seconds_elapsed']],
+        )
+    )
+  }
+
+  feature_cols <- get_all_features(
+    is_pre_plant = TRUE,
+    named = FALSE
+  )
+
+  extra_grid_cols <- c(
+    'model_seconds_remaining'
+  )
+  extra_filt_cols <- c(
+    'side',
+    'is_wp_hardcoded',
+    'hardcoded_wp'
+  )
+  id_cols <- c(
+    'seconds_elapsed',
+    'is_pre_plant'
+  )
+  activity_cols <- stringr::str_subset(names(filt), '^activity')
+
+  df <- grid |>
+    dplyr::left_join(
+      filt |>
+        dplyr::select(
+          tidyselect::vars_select_helpers$all_of(
+            c(
+              id_cols,
+              feature_cols,
+              extra_filt_cols,
+              activity_cols
+            )
+          )
+        ),
+      by = id_cols,
+      multiple = 'all'
+    ) |>
+    ## for prediction corrections
+    tidyr::fill(
+      tidyselect::vars_select_helpers$all_of(
+        c(
+          feature_cols,
+          extra_grid_cols,
+          extra_filt_cols
+        )
+      ),
+      .direction = 'down'
+    )
+
+  init_labels <- dplyr::filter(
+    df,
+    !is.na(.data[['activity']])
+  )
+
+  ## be careful to not fill this in before init_labels so that way we don't have an activity for every second
+  df |>
+    tidyr::fill(
+      tidyselect::vars_select_helpers$all_of(
+        activity_cols
+      ),
+      .direction = 'up'
+    )
+}
+
 plot_round <- function(
   model,
   data,
