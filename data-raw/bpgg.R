@@ -66,3 +66,8 @@ scrape_team_logos <- function(season) {
 }
 
 c(2021, 2022, 2023) |> purrr::walk(scrape_team_logos)
+# list.files(
+#   file.path('inst', 'logos', 'bpgg'),
+#   full.names = TRUE,
+#   include.dirs = FALSE
+# )

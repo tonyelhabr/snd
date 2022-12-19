@@ -10,9 +10,10 @@ bpgg_team_mapping <- c(
   'LAT' = 'Los Angeles Thieves',
   'LDN' = 'London Royal Ravents',
   'MIN' = 'Minnesota ROKKR',
-  'NYSL' = 'New York Subliners',
+  'NYS' = 'New York Subliners',
   'OPT' = 'OpTic Texas',
-  'PAR' = 'Las Vegas Legion',
+  'LVL' = 'Las Vegas Legion',
+  'PAR' = 'Paris Legion',
   'SEA' = 'Seattle Surge',
   'TOR' = 'Toronto Ultra'
 )
@@ -41,7 +42,7 @@ team_color_mapping <- c(
   'LAT' = '#ef3232',
   'LDN' = '#CF152D',
   'MIN' = '#351f68',
-  'NYSL' = '#FEE306',
+  'NYS' = '#FEE306',
   'OPT' = '#9dc73b',
   'PAR' = '#EE7623',
   'SEA' = '#16667D',

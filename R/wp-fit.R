@@ -117,3 +117,58 @@ fit_wp_model_state <- function(data, is_pre_plant) {
   class(res) <- c('wp_model_state', class(res))
   res
 }
+
+
+count_wp_by_situation <- function(data) {
+
+  validate_naive_colnames(data)
+
+  agg <- data |>
+    dplyr::count(
+      .data[['side']],
+      .data[['is_post_plant']],
+      .data[['n_team_pre_activity']],
+      .data[['n_opponent_pre_activity']],
+      .data[['win_round']]
+    ) |>
+    dplyr::right_join(
+      tidyr::crossing(
+        'side' = c('o', 'd'),
+        'is_post_plant' = c(TRUE, FALSE),
+        'n_team_pre_activity' = 0L:4L,
+        'n_opponent_pre_activity' = 0L:4L,
+        'win_round' = c('yes', 'no')
+      ),
+      by = c(
+        'side',
+        'is_post_plant',
+        'n_team_pre_activity',
+        'n_opponent_pre_activity',
+        'win_round'
+      )
+    ) |>
+    dplyr::group_by(
+      .data[['side']],
+      .data[['is_post_plant']],
+      .data[['n_team_pre_activity']],
+      .data[['n_opponent_pre_activity']]
+    ) |>
+    dplyr::mutate(
+      'total' = sum(.data[['n']])
+    ) |>
+    dplyr::ungroup() |>
+    dplyr::mutate(
+      'wp' = .data[['n']] / .data[['total']]
+    ) %>%
+    dplyr::select(
+      'side',
+      'is_post_plant',
+      'n_team_pre_activity',
+      'n_opponent_pre_activity',
+      'wp'
+    )
+
+  class(agg) <- c('wp_model_naive', 'wp_model', class(agg))
+  agg
+}
+

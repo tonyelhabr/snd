@@ -53,3 +53,18 @@ augment.wp_model <- function(x, data, ...) {
   data[['wp']] <- stats::predict(x, data, ...)
   data
 }
+
+predict.wp_model_naive <- function(object, new_data, ...) {
+
+  validate_naive_colnames(data = object, is_predict = FALSE) ## should have win_round column
+  validate_naive_colnames(data = new_data, is_predict = TRUE)
+
+  object |>
+    dplyr::inner_join(
+      new_data |>
+        dplyr::select(
+          -tidyselect::vars_select_helpers$any_of("wp")
+        ),
+      by = setdiff(colnames(object, 'wp'))
+    )
+}

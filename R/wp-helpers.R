@@ -112,3 +112,30 @@ fit_wp_model_states <- function(data, ...) {
   class(models) <- c('wp_model', class(models))
   models
 }
+
+validate_naive_colnames <- function(data, is_predict = FALSE) {
+
+  required_cols <- c(
+    'side',
+    'is_post_plant',
+    'n_team_pre_activity',
+    'n_opponent_pre_activity'
+  )
+
+  required_cols <- if (isFALSE(is_predict)) {
+    c(required_cols, 'win_round')
+  }
+
+  nms_diff <- setdiff(
+    required_cols,
+    colnames(data)
+  )
+
+  if (length(nms_diff) > 0L) {
+    stop(
+      sprintf('Missing essential columns:\n%s', paste0(nms_diff, collapse = ', '))
+    )
+  }
+
+  invisible(TRUE)
+}
