@@ -9,6 +9,6 @@ rm('path_r_profile')
 if (interactive()) {
   suppressMessages(library(devtools))
   suppressMessages(library(usethis))
-  suppressMessages(library(pkgdown))
+  # suppressMessages(library(pkgdown))
   pkgload::load_all()
 }

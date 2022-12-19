@@ -51,7 +51,8 @@ fit_window_wp_coefs <- function(data, earliest_seconds_elapsed, latest_seconds_e
 
 estimate_window_coefs <- function(data, is_pre_plant) {
 
-  seconds_grid <- generate_seconds_grid(is_pre_plant = is_pre_plant)
+  split_name <- ifelse(isTRUE(is_pre_plant), 'pre', 'post')
+  seconds_grid <- seconds_grid[[split_name]]
   seconds_grid |>
     dplyr::transmute(
       'model_seconds_elapsed' = .data[['min_second']],

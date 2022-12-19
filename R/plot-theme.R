@@ -41,7 +41,7 @@ theme_snd <- function() {
 #' @rdname theme_snd
 #' @export
 theme_set_snd <- function() {
-  extrafont::loadfonts('win', quiet = TRUE)
+  extrafont::loadfonts('all', quiet = TRUE)
   ggplot2::theme_set(theme_snd())
   ggplot2::update_geom_defaults('text', list(family = font, size = 10 / ggplot2::.pt, fontface = 'bold'))
   ggplot2::update_geom_defaults('point', list(color = 'white'))
