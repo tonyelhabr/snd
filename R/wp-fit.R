@@ -21,7 +21,7 @@ fit_window_wp_coefs <- function(data, earliest_seconds_elapsed, latest_seconds_e
     warning(sprintf('Only one unique value in target variable %s', msg))
   }
 
-  feature_names <-   get_all_features(
+  feature_names <- get_all_features(
     is_pre_plant = is_pre_plant,
     named = FALSE
   )
@@ -92,7 +92,7 @@ fit_wp_model_state <- function(data, is_pre_plant) {
     is_pre_plant = is_pre_plant
   )
 
-  feature_names <-   get_all_features(
+  feature_names <- get_all_features(
     is_pre_plant = is_pre_plant,
     named = FALSE
   )
@@ -119,7 +119,33 @@ fit_wp_model_state <- function(data, is_pre_plant) {
 }
 
 
-count_wp_by_situation <- function(data) {
+#' Fit a win probability model
+#'
+#' @param data data.frame with at least the following columns: `side`, `bleh`
+#' @export
+#' @rdname fit_wp_model
+#' @return tlist of two data.frames under the names `pre` and `post`
+fit_wp_model <- function(data, ...) {
+  fit_wp_model_states(data = data, ...)
+}
+
+#' @source <https://github.com/nflverse/nflreadr/blob/main/R/utils.R>
+#' @export
+#' @noRd
+print.wp_model <- function(x, ...) {
+  cat('Win probability model for Call of Duty Search and Destroy. LOESS-smoothed time-contextualized logistic regression coefficients.')
+  invisible(x)
+}
+
+#' Fit a naive win probability model
+#'
+#' Use situational variables to make a win probability "model" that is really just
+#' a lookup table of emppirical win proportions given the situation (time independent).
+#'
+#' @param data data.frame with at least the following columns: `side`, `is_post_plant`, `n_team_pre_activity`
+#' @export
+#' @rdname fit_wp_model
+fit_naive_wp_model <- function(data) {
 
   validate_naive_colnames(data)
 
@@ -168,7 +194,14 @@ count_wp_by_situation <- function(data) {
       'wp'
     )
 
-  class(agg) <- c('wp_model_naive', 'wp_model', class(agg))
+  class(agg) <- c('wp_model_naive', class(agg))
   agg
 }
 
+#' @export
+#' @noRd
+print.wp_model_naive <- function(x, ...) {
+  cat('data.frame that is a "model".')
+  NextMethod(print, x)
+  invisible(x)
+}

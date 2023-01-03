@@ -23,6 +23,7 @@ theme_snd <- function() {
       panel.grid.minor.x = ggplot2::element_blank(),
       panel.grid.minor.y = ggplot2::element_blank(),
       strip.text = ggplot2::element_text(color = 'white', size = 12, face = 'bold'),
+      strip.background = ggplot2::element_rect(fill = blackish_background, color = blackish_background),
       legend.title = ggplot2::element_text(color = 'white', size = 12, face = 'bold'),
       legend.text = ggplot2::element_text(color = 'white', size = 12, face = 'plain'),
       plot.margin = ggplot2::margin(10, 10, 10, 10),

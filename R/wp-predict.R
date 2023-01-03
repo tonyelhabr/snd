@@ -21,10 +21,6 @@ predict.wp_model_state <- function(object, new_data, ...) {
   stats::plogis(log_odds) ## logit
 }
 
-fit_wp_model <- function(data, ...) {
-  fit_wp_model_states(data = data, ...)
-}
-
 predict.wp_model <- function(object, new_data, ...) {
 
   validate_colnames(data = new_data, is_predict = TRUE)
@@ -49,6 +45,7 @@ predict.wp_model <- function(object, new_data, ...) {
 
 }
 
+#' @export
 augment.wp_model <- function(x, data, ...) {
   data[['wp']] <- stats::predict(x, data, ...)
   data
